@@ -1,5 +1,6 @@
 package com.mohamed.halim.javaeats.dto.request;
 
+import com.mohamed.halim.javaeats.validation.PasswordConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -15,8 +16,7 @@ public class UserRegistration {
     @NotBlank
     @Email
     private String email;
-    @NotBlank
-    //TODO: try custom validation to validate this
+    @PasswordConstraint
     private String password;
 
 }
