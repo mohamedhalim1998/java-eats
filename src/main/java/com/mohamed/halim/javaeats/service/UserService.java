@@ -5,6 +5,8 @@ import com.mohamed.halim.javaeats.dto.request.UserRegistration;
 import com.mohamed.halim.javaeats.dto.response.UserDto;
 import com.mohamed.halim.javaeats.exceptions.EmailAlreadyExistException;
 import com.mohamed.halim.javaeats.exceptions.UserAlreadyExistException;
+import com.mohamed.halim.javaeats.exceptions.WrongLoginException;
+import com.mohamed.halim.javaeats.jwt.JwtService;
 import com.mohamed.halim.javaeats.mapper.UserMapper;
 import com.mohamed.halim.javaeats.model.AppUser;
 import com.mohamed.halim.javaeats.repository.UserRepository;
@@ -40,7 +42,10 @@ public class UserService {
     public UserDto loginUser(UserLogin login) {
         var user =  userRepository.findByEmail(login.getUsername())
                 .orElseGet(() -> userRepository.findByName(login.getUsername())
-                        .orElseThrow(() -> new UsernameNotFoundException(login.getUsername())));
+                        .orElseThrow(WrongLoginException::new));
+        if(!encoder.matches(login.getPassword(), user.getPassword())) {
+            throw new WrongLoginException();
+        }
         return userMapper.fromAppUser(user);
     }
 }
