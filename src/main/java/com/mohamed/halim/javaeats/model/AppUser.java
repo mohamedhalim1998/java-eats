@@ -33,6 +33,7 @@ public class AppUser implements UserDetails {
     @Column(unique = true)
     private String email;
     private String password;
+    private transient String jwt;
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate

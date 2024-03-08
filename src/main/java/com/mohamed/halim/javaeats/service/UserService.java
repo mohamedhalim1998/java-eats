@@ -11,7 +11,6 @@ import com.mohamed.halim.javaeats.mapper.UserMapper;
 import com.mohamed.halim.javaeats.model.AppUser;
 import com.mohamed.halim.javaeats.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final UserMapper userMapper;
+    private final JwtService jwtService;
 
     public UserDto registerUser(UserRegistration registration) {
         var user = userMapper.fromUserRegistration(registration);
         validateUser(user);
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setJwt(jwtService.generateToken(user));
         return userMapper.fromAppUser(userRepository.save(user));
     }
 
@@ -46,6 +47,7 @@ public class UserService {
         if(!encoder.matches(login.getPassword(), user.getPassword())) {
             throw new WrongLoginException();
         }
+        user.setJwt(jwtService.generateToken(user));
         return userMapper.fromAppUser(user);
     }
 }
