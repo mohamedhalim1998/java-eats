@@ -10,15 +10,15 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public abstract class CrudService<T, ID, M> {
-    private final BaseRepository<T, ID> repository;
-    private final BaseMapper<T, M> mapper;
+    protected final BaseRepository<T, ID> repository;
+    protected final BaseMapper<T, M> mapper;
 
     public List<M> getAll() {
-        return repository.findAll().stream().map(mapper::toDto).toList();
+        return mapper.toDto(repository.findAll());
     }
 
     public List<M> getAll(Specification<T> specification) {
-        return repository.findAll(specification).stream().map(mapper::toDto).toList();
+        return mapper.toDto(repository.findAll(specification));
     }
 
     public Optional<M> findById(ID id) {
