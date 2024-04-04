@@ -6,6 +6,9 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,11 +23,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@EntityListeners(AuditingEntityListener.class)
-public class AppUser implements UserDetails {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -39,10 +40,6 @@ public class AppUser implements UserDetails {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
 
     @Override
     public String getUsername() {
@@ -66,6 +63,6 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

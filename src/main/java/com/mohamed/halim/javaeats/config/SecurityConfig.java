@@ -1,6 +1,7 @@
 package com.mohamed.halim.javaeats.config;
 
 import com.mohamed.halim.javaeats.jwt.JwtFilter;
+import com.mohamed.halim.javaeats.model.Roles;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,15 +29,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @AllArgsConstructor
 public class SecurityConfig {
     private JwtFilter jwtFilter;
 
     private final AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[]{
-            AntPathRequestMatcher.antMatcher("/api/V1/user/register"),
-            AntPathRequestMatcher.antMatcher("/api/V1/user/login"),
-            AntPathRequestMatcher.antMatcher("/h2-console/**")
+            AntPathRequestMatcher.antMatcher("/api/V1/user/customer/register"),
+            AntPathRequestMatcher.antMatcher("/api/V1/user/customer/login"),
+            AntPathRequestMatcher.antMatcher("/api/V1/user/admin/login"),
+            AntPathRequestMatcher.antMatcher("/api/V1/user/manager/login"),
+            AntPathRequestMatcher.antMatcher("/h2-console/**"),
+            AntPathRequestMatcher.antMatcher("/")
+    };
+    private final AntPathRequestMatcher[] adminAuthList = new AntPathRequestMatcher[]{
+            AntPathRequestMatcher.antMatcher("/api/V1/user/admin/register")
+    };
+    private final AntPathRequestMatcher[] mangerAuthList = new AntPathRequestMatcher[]{
+            AntPathRequestMatcher.antMatcher("/api/V1/user/manger/register")
     };
 
     @Bean
@@ -47,6 +57,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider(userDetailsService))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(whiteList).permitAll()
+                        .requestMatchers(adminAuthList).hasRole(Roles.ADMIN.name())
+                        .requestMatchers(mangerAuthList).hasAnyRole(Roles.MANAGER.name(), Roles.ADMIN.name())
                         .anyRequest().authenticated())
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

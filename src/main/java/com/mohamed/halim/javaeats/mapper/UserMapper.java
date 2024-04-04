@@ -6,11 +6,10 @@ import com.mohamed.halim.javaeats.model.AppUser;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
-public abstract class UserMapper {
+public interface UserMapper<T extends AppUser> {
     @Mapping(source = "username", target = "name")
-    public abstract AppUser fromUserRegistration(UserRegistration registration);
+    public abstract T fromUserRegistration(UserRegistration registration);
 
-    public abstract UserDto fromAppUser(AppUser user);
+    public abstract UserDto fromAppUser(T user);
 }
 

@@ -7,19 +7,20 @@ import com.mohamed.halim.javaeats.exceptions.EmailAlreadyExistException;
 import com.mohamed.halim.javaeats.exceptions.UserAlreadyExistException;
 import com.mohamed.halim.javaeats.exceptions.WrongLoginException;
 import com.mohamed.halim.javaeats.jwt.JwtService;
+import com.mohamed.halim.javaeats.mapper.AdminUserMapper;
 import com.mohamed.halim.javaeats.mapper.UserMapper;
 import com.mohamed.halim.javaeats.model.AppUser;
+import com.mohamed.halim.javaeats.repository.AdminRepository;
 import com.mohamed.halim.javaeats.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
-@Service
-public class UserService {
-    private final UserRepository userRepository;
+public abstract class UserService<T extends AppUser>  {
+    private final UserRepository<T> userRepository;
     private final PasswordEncoder encoder;
-    private final UserMapper userMapper;
+    private final UserMapper<T> userMapper;
     private final JwtService jwtService;
 
     public UserDto registerUser(UserRegistration registration) {

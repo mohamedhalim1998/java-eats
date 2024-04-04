@@ -28,7 +28,7 @@ public class Menu {
     private Restaurant restaurant;
     @ManyToMany
     @JoinTable(name = "MENU_ITEM")
-    List<Item> menuItems;
+    private List<Item> menuItems;
     private boolean active;
     @CreatedDate
     private LocalDateTime createdAt;

@@ -2,12 +2,14 @@ package com.mohamed.halim.javaeats.repository;
 
 import com.mohamed.halim.javaeats.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<AppUser, Long> {
-    Optional<AppUser> findByName(String name);
-    Optional<AppUser> findByEmail(String name);
+@NoRepositoryBean
+public interface UserRepository<T extends AppUser> extends JpaRepository<T, Long> {
+    Optional<T> findByName(String name);
+    Optional<T> findByEmail(String name);
 
 
 }

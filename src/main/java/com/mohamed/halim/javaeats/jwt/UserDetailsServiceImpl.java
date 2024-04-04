@@ -1,5 +1,6 @@
 package com.mohamed.halim.javaeats.jwt;
 
+import com.mohamed.halim.javaeats.repository.AdminRepository;
 import com.mohamed.halim.javaeats.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserRepository userRepository;
+    private final AdminRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

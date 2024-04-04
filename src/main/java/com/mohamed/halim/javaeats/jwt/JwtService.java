@@ -32,13 +32,12 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        var claims = new HashMap<String, Object>();
+        claims.put("ROLES", userDetails.getAuthorities());
+        return generateToken(claims, userDetails);
     }
 
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
