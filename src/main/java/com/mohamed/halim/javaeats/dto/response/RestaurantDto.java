@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantDto {
+public class RestaurantDto implements BaseDto<Long> {
     private Long id;
     private String name;
     private String description;
